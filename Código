@@ -1,0 +1,34 @@
+Public Sub ExportarPlanilhasParaPDF()
+    On Error GoTo TratarErro
+
+    Dim lWorkbook As Workbook
+    Dim ws As Worksheet
+    Dim lCaminho As String
+    
+    ' Desativa atualização da tela
+    Application.ScreenUpdating = False
+    
+    ' Define o objeto da pasta de trabalho ativa
+    Set lWorkbook = ActiveWorkbook
+    lCaminho = Application.ActiveWorkbook.Path
+    
+    ' Loop entre as planilhas da pasta de trabalho
+    For Each ws In ActiveWorkbook.Worksheets
+        ws.ExportAsFixedFormat Type:=xlTypePDF, _
+                              Filename:=lCaminho & "\" & ws.Name & ".pdf", _
+                              Quality:=xlQualityStandard, _
+                              IncludeDocProperties:=True, _
+                              IgnorePrintAreas:=False, _
+                              OpenAfterPublish:=False
+    Next ws
+    
+    MsgBox "Planilhas exportadas em PDF em: " & lCaminho
+    
+Sair:
+    Application.ScreenUpdating = True
+    Exit Sub
+    
+TratarErro:
+    MsgBox "Houve uma falha: " & Err.Description
+    GoTo Sair
+End Sub
